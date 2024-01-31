@@ -20,7 +20,7 @@ is_valid_ip_or_subnet() {
 # Function to calculate the number of hosts in a subnet using ipcalc
 calculate_hosts_for_subnet() {
     local subnet=$1
-    local host_count=$(ipcalc "$subnet" | grep -oP 'Hosts/Net:\s+\K\d+')
+    local host_count=$(ipcalc "$subnet" | grep 'Hosts/Net:' | awk '{print $2}')
     echo "$host_count"
 }
 

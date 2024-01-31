@@ -39,11 +39,11 @@ calculate_hosts_for_range() {
 calculate_hosts() {
     local input=$1
 
-    if grep -q '/' <<< "$input"; then
+    if grep -qE '/' <<< "$input"; then
         # Subnet
         host_count=$(calculate_hosts_for_subnet "$input")
         echo "$host_count"
-    elif grep -q '-' <<< "$input"; then
+    elif grep -qE '-' <<< "$input"; then
         # Range
         host_count=$(calculate_hosts_for_range "$input")
         echo "$host_count"
@@ -53,6 +53,7 @@ calculate_hosts() {
     fi
 }
 
+# Process a file or a single input
 # Process a file or a single input
 process_input() {
     local input=$1
@@ -65,9 +66,9 @@ process_input() {
             if [ -n "$line" ]; then
                 host_count=$(calculate_hosts "$line")
                 total_hosts=$((total_hosts + host_count))
-                if grep -q '/' <<< "$line"; then
+                if grep -qE '/' <<< "$line"; then
                     echo -e "${YELLOW}Subnet $line: ${GREEN}$host_count${NC}"
-                elif grep -q '-' <<< "$line"; then
+                elif grep -qE '-' <<< "$line"; then
                     echo -e "${YELLOW}Range $line: ${GREEN}$host_count${NC}"
                 else
                     echo -e "${YELLOW}Host $line: ${GREEN}$host_count${NC}"
@@ -78,9 +79,9 @@ process_input() {
         # Single input
         host_count=$(calculate_hosts "$input")
         total_hosts=$((total_hosts + host_count))
-        if grep -q '/' <<< "$input"; then
+        if grep -qE '/' <<< "$input"; then
             echo -e "${YELLOW}Subnet $input: ${GREEN}$host_count${NC}"
-        elif grep -q '-' <<< "$input"; then
+        elif grep -qE '-' <<< "$input"; then
             echo -e "${YELLOW}Range $input: ${GREEN}$host_count${NC}"
         else
             echo -e "${YELLOW}Host $input: ${GREEN}$host_count${NC}"
